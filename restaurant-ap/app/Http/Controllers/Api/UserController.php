@@ -132,8 +132,25 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function getUser() {
+        $user = auth()->user();
+    
+    
+        if (is_null($user)) {
+            return response()->json([
+                'user' => null,
+                'message' => "User not found",
+                'status' => 0
+            ]);
+        } else {
+            return response()->json([
+                'user' => $user,               
+                'message' => "User found",
+                'status' => 1
+            ]);
+        }
     }
+
+
+
 }

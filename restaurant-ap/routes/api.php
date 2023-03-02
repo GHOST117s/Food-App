@@ -3,6 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\FoodController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\Order_itemController;
+use App\Http\Controllers\Api\WishlistController;
+
 
 
 /*
@@ -22,10 +27,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register',[UserController::class,'register']);
 Route::post('/login',[UserController::class,'login']);
+Route::get('/allfood',[FoodController::class,'getFood']);
 
 
 Route::middleware(['auth:api'])->group(function(){
     Route::post('/logout',[UserController::class,'logout']);
+    Route::get('/user',[UserController::class,'getUser']); 
 
+   Route::post('/food',[FoodController::class,'createFood']);
+
+   Route::post('/cart',[CartController::class,'store']);
+   Route::delete('cart/{id}', [CartController::class, 'destroy']);
+    Route::get('/cartitems',[CartController::class,'show']);
+    Route::post('/checkout',[Order_itemController::class,'checkout']);
+Route::post('/wishlist',[WishlistController::class,'wishlist']);
+
+Route::get('/wishlist',[WishlistController::class,'index']);
 });
 
