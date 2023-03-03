@@ -46,25 +46,33 @@ class WishlistController extends Controller
 {
     $user = Auth::user();
 
-    //dont add duplicate items to wishlist
-    
     $validateData = $request->validate([
-        'food_id' =>'required',
-        
-    ]); 
-   
-    $wishlist = $user->wishlist()->create([
-
-        'user_id' => Auth::id(),
-        'food_id' => $validateData['food_id'],
-        
+        'food_id' => 'required',
     ]);
+$wishlist = Wishlist::where('user_id', Auth::id())
+                    ->where('food_id', $validateData['food_id'])
+                    ->first();
+
+
+    if ($wishlist) {
+        return response()->json([
+            'message' => 'Already in wishlist',
+            'status' => 200
+        ]);
+    }
+    else {
+        $wishlist = Wishlist::create([
+            'user_id' => Auth::id(),
+            'food_id' => $validateData['food_id'],
+        ]);
+    }
+    
 
    
   
 
    return response()->json([
-        'wishlist' => $wishlist,
+        'message' => 'Added to wishlist',
         'status' => 200
     ]);
 
@@ -106,5 +114,11 @@ class WishlistController extends Controller
         //remove from wishlist
         $wishlist = Wishlist::find($id);
         $wishlist->delete();
+
+
+        return response()->json([
+            'message' => 'Removed from wishlist',
+            'status' => 200
+        ]);
     }
 }

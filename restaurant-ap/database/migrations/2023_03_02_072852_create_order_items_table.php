@@ -12,13 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
+            $table->id();           
             
-            $table->foreignId('food_id')->constrained('food');
             $table->foreignId('user_id')->constrained('users');
             $table->integer('quantity');
             $table->integer('total_price');
-
             $table->timestamps();
         });
     }
@@ -29,5 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('order_items');
+        //drop the foreign key
+        
     }
 };
