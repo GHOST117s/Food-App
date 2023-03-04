@@ -113,6 +113,12 @@ $wishlist = Wishlist::where('user_id', Auth::id())
     {
         //remove from wishlist
         $wishlist = Wishlist::find($id);
+        if(!$wishlist) {
+            return response()->json([
+                'message' => 'Wishlist item not found',
+                'status' => 404
+            ]);
+        }
         $wishlist->delete();
 
 

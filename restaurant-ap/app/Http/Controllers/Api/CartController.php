@@ -77,22 +77,7 @@ class CartController extends Controller
         //get all the cart items
         $carts = Carts::with('food')->where('user_id', Auth::id())->get();
         
-
-        //if the same food is already in the cart
-        //then update the quantity
-        // foreach ($carts as $cart) {
-        //     if ($cart->food_id == $request->food_id) {
-        //         $cart->quantity += $request->quantity;
-        //         $cart->save();
-
-        //         return response()->json([
-        //             'cart' => $cart,
-        //             'status' => 200
-        //         ]);
-        //     }
-        // }
-
-        // sum up all the cart items price
+        //calculate the total price
         $total = 0;
         foreach ($carts as $cart) {
             $total += $cart->food->price * $cart->quantity;

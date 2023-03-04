@@ -1,0 +1,27 @@
+public function update(Request $request, $id)
+   {
+       $user = Auth::user();
+       $address = Address::where('user_id', $user->id)->where('id', $id)->first();
+       $validateData = $request->validate([
+           'address' => 'required',
+           'city' => 'required',
+           'state' => 'required',
+           'country' => 'required',
+           'zip_code' => 'required|numeric|digits:6',
+           'phone' => 'required|numeric|digits:10',
+       ]);
+
+       $address->update([
+           'address' => $validateData['address'],
+           'city' => $validateData['city'],
+           'state' => $validateData['state'],
+           'country' => $validateData['country'],
+           'zip_code' => $validateData['zip_code'],
+           'phone' => $validateData['phone'],
+       ]);
+
+       return response()->json([
+           'message' => 'Address updated successfully',
+           'status' => 200
+       ]);
+   }
