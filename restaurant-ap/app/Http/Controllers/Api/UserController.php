@@ -134,6 +134,8 @@ class UserController extends Controller
      */
     public function getUser() {
         $user = auth()->user();
+        //address
+        $user->address;
     
     
         if (is_null($user)) {
@@ -144,7 +146,8 @@ class UserController extends Controller
             ]);
         } else {
             return response()->json([
-                'user' => $user,               
+                'user' => $user, 
+                'address' => $user->address,              
                 'message' => "User found",
                 'status' => 1
             ]);

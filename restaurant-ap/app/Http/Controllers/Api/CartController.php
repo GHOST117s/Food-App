@@ -55,15 +55,21 @@ class CartController extends Controller
             $cartItem->save();
         } else {
             // If food_id does not exist, create a new cart item
+
+            //total price
+            
+
             $cartItem = Carts::create([
                 'user_id' => Auth::id(),
                 'food_id' => $validatedData['food_id'],
                 'quantity' => $validatedData['quantity']
+
+
             ]);
         }
     
         return response()->json([
-            'cart' => $cartItem,
+            'cart' => $cartItem,            
             'status' => 200
         ]);
     }
@@ -111,6 +117,7 @@ class CartController extends Controller
      */
     public function destroy(string $id)
     {
+        
         $cart = Carts::where([
             ['user_id', '=', Auth::id()],
             ['id', '=', $id]

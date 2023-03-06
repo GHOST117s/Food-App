@@ -14,6 +14,7 @@ const userpage = () => {
     axios.get('http://127.0.0.1:8000/api/user')
     .then((response) => {
       setUser(response.data.user);
+      console.log(response.data.user.address);
      
     })
     .catch((error) => {
@@ -37,11 +38,29 @@ const userpage = () => {
         <br className="hidden lg:inline-block"/>
       </h1>
       <p className="mb-8 leading-relaxed">{user.email}</p>
+        {/* {user.address && user.address.map((address) => (
       <div className="flex justify-center">
        
+<a href="#" class="block max-w-sm p-3 m-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{address.address}</h5>
+    <p class="font-normal text-gray-700 dark:text-gray-400">{address.city}</p>
+    <p class="font-normal text-gray-700 dark:text-gray-400">{address.state}</p>
+    <p class="font-normal text-gray-700 dark:text-gray-400">{address.zip_code}</p>
+    <p class="font-normal text-gray-700 dark:text-gray-400">{address.country}</p>
+    <p class="font-normal text-gray-700 dark:text-gray-400">{address.phone}</p>
+
+
+
+</a>
+
+       
       </div>
+        ))} */}
     </div>
+
+    
   </div>
+  
 </section>
       
     </div>

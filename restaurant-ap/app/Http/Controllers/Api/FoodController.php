@@ -38,7 +38,7 @@ class FoodController extends Controller
             'food_name' =>'required|min:3',
             'food_description' =>'required|min:8',
             'price' =>['required', 'integer'],            
-             'picture' =>['file','mimes:jpeg,png,gif','max:4072'],
+             'picture' =>['file','mimes:jpeg,jpg,png,gif','max:4072'],
         ]);
         $path =null;
             

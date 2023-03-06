@@ -25,8 +25,11 @@ class WishlistController extends Controller
             ->distinct('food_id')
             ->get();
     
+         
+
         return response()->json([
-            'wishlist' => $wishlist
+            'wishlist' => $wishlist,
+           
         ]);
     }
     
@@ -57,7 +60,7 @@ $wishlist = Wishlist::where('user_id', Auth::id())
     if ($wishlist) {
         return response()->json([
             'message' => 'Already in wishlist',
-            'status' => 200
+            'status' => 300
         ]);
     }
     else {
