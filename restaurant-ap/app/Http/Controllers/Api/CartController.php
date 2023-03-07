@@ -18,12 +18,31 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $carts = Cart::with('food')->where('user_id', Auth::id())->get();
-        // return response()->json([
-        //     'carts' => $carts
-        // ]);
+        $validatedData = $request->validate([
+            'food_id' => 'required',
+            'quantity' => ['required', 'integer', 'min:1']
+        ]);
+        $cartItem = Carts::where('user_id', Auth::user()->id)
+        ->where('food_id', $validatedData['food_id'])->first();
+
+        //if the food found the decrease the quantity by 1
+        if($cartItem){
+            $cartItem->quantity = $cartItem->quantity - 1;
+            $cartItem->save();
+        }
+
+        //update the price 
+        $cartItem->total = $cartItem->food->price * $cartItem->quantity;
+        $cartItem->save();
+
+        
+
+        return response()->json([
+            'cartItem' => $cartItem,
+            'status' => 200
+        ]);
     }
 
     /**
@@ -48,11 +67,20 @@ class CartController extends Controller
         $cartItem = Carts::where('user_id', Auth::id())
                           ->where('food_id', $validatedData['food_id'])
                           ->first();
+
+
+        //get the user's food
+        $food = Food::findOrFail($validatedData ['food_id']);                  
     
         if ($cartItem) {
             // If food_id exists, update the quantity
             $cartItem->quantity += $validatedData['quantity'];
+            $cartItem->total += $food->price * $validatedData['quantity'];
             $cartItem->save();
+            return response()->json([
+                'cart' => $cartItem,
+                'status' => 300
+            ]);
         } else {
             // If food_id does not exist, create a new cart item
 
@@ -62,9 +90,8 @@ class CartController extends Controller
             $cartItem = Carts::create([
                 'user_id' => Auth::id(),
                 'food_id' => $validatedData['food_id'],
-                'quantity' => $validatedData['quantity']
-
-
+                'quantity' => $validatedData['quantity'],
+                'total' => $food->price * $validatedData['quantity']
             ]);
         }
     
@@ -126,11 +153,22 @@ class CartController extends Controller
         if ($cart) {
             $cart->delete();
         }
+        //cart total
+        $carts = Carts::with('food')->where('user_id', Auth::id())->get();
+        $total = 0;
+        foreach ($carts as $cart) {
+            $total += $cart->food->price * $cart->quantity;
+        }
 
         return response()->json([
-            'message' => 'Cart item deleted successfully.'
+            'message' => 'Cart item deleted successfully.',
+            'total' => $total
         ]);
     
     }
 
+   //remove single item by given item
+   
+   
 }
+

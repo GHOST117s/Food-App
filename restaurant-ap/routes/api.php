@@ -44,7 +44,7 @@ Route::middleware(['auth:api'])->group(function(){
    Route::post('/cart',[CartController::class,'store']);
    Route::delete('cart/{id}', [CartController::class, 'destroy']);
     Route::get('/cartitems',[CartController::class,'show']);
-
+    Route::post('/cartdelete',[CartController::class,'index']);
     // Route::post('/checkout',[Order_itemController::class,'checkout']);
     
 Route::post('/wishlist',[WishlistController::class,'wishlist']);

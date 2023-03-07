@@ -12,6 +12,7 @@ class Carts extends Model
         'user_id',
         'food_id',
         'quantity',
+        'total'
         
     ];
 

@@ -84,8 +84,8 @@ const handleAddToCart = () => {
     if(res.data.status === 300){
       Swal.fire({
         position: 'top-end',
-        icon: 'error',
-        title: 'Already Added to Cart',
+        icon: '',
+        title: ' Added to Cart',
         showConfirmButton: false,
         timer: 1500
       })
