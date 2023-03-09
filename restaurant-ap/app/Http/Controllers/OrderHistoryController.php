@@ -18,7 +18,7 @@ use App\Models\Address;
 
 class OrderHistoryController extends Controller
 {
-    public function store($id){
+    public function store(Request $request){
 
         $user = auth()->user();
 
@@ -33,7 +33,7 @@ class OrderHistoryController extends Controller
       
     
         // Check if the given address ID exists
-        $address = Address::where('user_id', $user->id)->find($id);
+        $address = Address::where('user_id', $user->id)->find($request->address_id);
     
         if(!$address){
             return response()->json([
@@ -60,6 +60,7 @@ class OrderHistoryController extends Controller
     
         return response()->json([
             'message' => 'Order placed successfully',
+            'status' => 200,
             
             'address' => $address,
             // 'cartItems' => $foods,

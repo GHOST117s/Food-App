@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
+use App\Models\OrderHistory;
+
 
 
 class UserController extends Controller
@@ -136,6 +138,9 @@ class UserController extends Controller
         $user = auth()->user();
         //address
         $user->address;
+        //get order history
+        $history = OrderHistory::where('user_id', $user->id)->get();
+        
     
     
         if (is_null($user)) {
@@ -147,7 +152,8 @@ class UserController extends Controller
         } else {
             return response()->json([
                 'user' => $user, 
-                'address' => $user->address,              
+                'address' => $user->address,
+                'history' => $history,
                 'message' => "User found",
                 'status' => 1
             ]);

@@ -38,7 +38,7 @@ const userpage = () => {
         <br className="hidden lg:inline-block"/>
       </h1>
       <p className="mb-8 leading-relaxed">{user.email}</p>
-        {/* {user.address && user.address.map((address) => (
+        {user.address && user.address.map((address) => (
       <div className="flex justify-center">
        
 <a href="#" class="block max-w-sm p-3 m-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
@@ -55,7 +55,7 @@ const userpage = () => {
 
        
       </div>
-        ))} */}
+        ))}
     </div>
 
     

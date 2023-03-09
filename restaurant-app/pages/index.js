@@ -7,19 +7,19 @@ import Cards from './cards'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
-const inter = Inter({ subsets: ['latin'] })
+// const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
   
 
   return (
     <>
-      <Navbar/>     
-{/* categories */}
-<div className='mt-14' >
-<Cards/>
-</div>  
-        
+      <Navbar />
+      <div className='mt-14'>
+        <Cards  />
+      </div>
+
     </>
   )
 }

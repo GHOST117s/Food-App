@@ -8,6 +8,10 @@ import axios from 'axios';
 
 const Navbar = () => {
   const [user , setUser] = useState(false)
+  
+
+
+ 
 
   useEffect(() => {
     if(localStorage.getItem('token')){
@@ -27,10 +31,6 @@ const Navbar = () => {
     else{
       setUser(false)
     }
-
-
-
-
 
   }, [])
 
@@ -55,9 +55,17 @@ const Navbar = () => {
       {/* <Link href='/userpage' className="mr-5 hover:text-gray-900">Profile</Link> */}
 
 
-    <Link href='/orderpage' className='m-2 ml-12 mr-7' > <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-</svg>
+    <Link href='/orderpage' className='m-2 ml-6 mr-7' >
+    <li className="font-sans block mt-4 lg:inline-block lg:mt-0 lg:ml-6 align-middle text-black hover:text-gray-700">
+  <div  role="button" className="relative flex">
+    <svg className="flex-1 w-8 h-8 fill-current" viewBox="0 0 24 24">
+      <path d="M17,18C15.89,18 15,18.89 15,20A2,2 0 0,0 17,22A2,2 0 0,0 19,20C19,18.89 18.1,18 17,18M1,2V4H3L6.6,11.59L5.24,14.04C5.09,14.32 5,14.65 5,15A2,2 0 0,0 7,17H19V15H7.42A0.25,0.25 0 0,1 7.17,14.75C7.17,14.7 7.18,14.66 7.2,14.63L8.1,13H15.55C16.3,13 16.96,12.58 17.3,11.97L20.88,5.5C20.95,5.34 21,5.17 21,5A1,1 0 0,0 20,4H5.21L4.27,2M7,18C5.89,18 5,18.89 5,20A2,2 0 0,0 7,22A2,2 0 0,0 9,20C9,18.89 8.1,18 7,18Z"/>
+      </svg>
+      <span className="absolute right-0 top-0 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm  leading-tight text-center">9
+    </span>
+  </div>
+</li>
+
 </Link>
 <div className="mr-6">
   <Dropdown user={user} setUser={setUser}/>

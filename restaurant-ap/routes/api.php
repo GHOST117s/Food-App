@@ -52,7 +52,7 @@ Route::get('/wishlistitems',[WishlistController::class,'index']);
 Route::delete('wishlist/{id}', [WishlistController::class, 'destroy']);
 
 
-Route::post('/order/{id}',[OrderHistoryController::class,'store']);
+Route::post('/order',[OrderHistoryController::class,'store']);
 
 
 Route::post('/address',[AddressController::class,'store']);

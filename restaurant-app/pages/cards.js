@@ -19,7 +19,7 @@ const cards = () => {
     axios.get('http://127.0.0.1:8000/api/allfood')
     .then(res => {
       setFood(res.data.food)
-      console.log(res.data.food);
+      // console.log(res.data.food);
     })
     .catch(err => {
       console.log(err)
@@ -28,7 +28,7 @@ const cards = () => {
 
 
   async function handleAddtocart(id){
-        console.log(id);
+        // console.log(id);
 
 if(check.includes(id)){
   setCheck(check.filter(item => item!== id))
@@ -54,14 +54,14 @@ else{
           food_id: id,
           quantity: 1,
         }
-        console.log(cart);
+        // console.log(cart);
         if(token){ 
           const formattedToken = token.replace(/^"(.*)"$/, '$1');    
           axios.defaults.headers.common['Authorization'] = `Bearer ${formattedToken}`;
         }
         axios.post('http://127.0.0.1:8000/api/cart' , cart)
         .then(res => {
-          console.log(res.data);
+          // console.log(res.data);
           if(res.data.status === 200){
             Swal.fire({
               position: 'top-end',
@@ -81,6 +81,9 @@ else{
             })
           }
         })
+        
+
+       
       
         
       }
@@ -92,6 +95,12 @@ else{
      const handleGoToCart = () => {
         router.push('/orderpage')
      }
+
+
+
+    //  useEffect(() => {
+    //   localStorage.setItem('quantity', JSON.stringify(quantity))
+    // }, [quantity])
 
 
      const wishlistpage = (id) => {

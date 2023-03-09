@@ -10,10 +10,6 @@ import Swal from 'sweetalert2';
 const orderpage = () => {
     const [carts, setCart] = useState([])
     const [total, setTotal] = useState()
-    const [quantity, setQuantity] = useState(1)
-
-
-
 
     useEffect(() => {
         const token = localStorage.getItem('token').replace(/^"(.*)"$/, '$1');
@@ -123,14 +119,17 @@ const orderpage = () => {
          axios.get(`http://127.0.0.1:8000/api/cartitems`)
           .then(res => {    
               setCart(res.data.carts)           
-              setTotal(res.data.total)              
-
+              setTotal(res.data.total)    
+              
+              
           })
 
           
       })
       .catch((err) => console.log(err));
   }
+
+
 
 
    async function handleAdd(id,food_id){
@@ -164,7 +163,10 @@ const orderpage = () => {
            axios.get(`http://127.0.0.1:8000/api/cartitems`)
             .then(res => {    
                 setCart(res.data.carts)           
-                setTotal(res.data.total)              
+                setTotal(res.data.total)        
+                
+                setQuantity((prevQuantity) => prevQuantity + 1);
+                console.log(quantity);
 
             })
 
@@ -176,7 +178,7 @@ const orderpage = () => {
 
     return (
         <div>
-            <Navbar />
+            <Navbar  />
 
             <div className="min-h-screen bg-gray-100 flex justify-center p-8">
 
@@ -247,12 +249,12 @@ const orderpage = () => {
 
                     </table>
 
-                    <button className="flex ml-auto m-5 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"> CheckOut
+              <Link href='/confirmation'   >   <button className="flex ml-auto m-5 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"> CheckOut
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 ml-1">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         ₹{total}
-                    </button>
+                    </button> </Link>
 
                 </div>
 
