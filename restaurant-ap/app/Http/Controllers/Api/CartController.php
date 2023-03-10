@@ -94,6 +94,7 @@ class CartController extends Controller
                 'total' => $food->price * $validatedData['quantity']
             ]);
         }
+        
     
         return response()->json([
             'cart' => $cartItem,            
@@ -115,9 +116,15 @@ class CartController extends Controller
         foreach ($carts as $cart) {
             $total += $cart->food->price * $cart->quantity;
         }
+        
+        $totalquantity = 0;
+        foreach ($carts as $cart) {
+            $totalquantity += $cart->quantity;
+        }
 
         return response()->json([
             'carts' => $carts,
+            'totalquantity' => $totalquantity,
             'total' => $total
         ]);
 

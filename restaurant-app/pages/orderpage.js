@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 const orderpage = () => {
     const [carts, setCart] = useState([])
     const [total, setTotal] = useState()
+   
+
 
     useEffect(() => {
         const token = localStorage.getItem('token').replace(/^"(.*)"$/, '$1');
@@ -20,7 +22,8 @@ const orderpage = () => {
                 setCart(res.data.carts)
                 setTotal(res.data.total)
                 // console.log(res.data.carts);
-                console.log(res.data.total);
+                console.log(res.data);
+               
                 //log each item quantity
 
 
@@ -165,8 +168,8 @@ const orderpage = () => {
                 setCart(res.data.carts)           
                 setTotal(res.data.total)        
                 
-                setQuantity((prevQuantity) => prevQuantity + 1);
-                console.log(quantity);
+                // setQuantity((prevQuantity) => prevQuantity + 1);
+                // console.log(quantity);
 
             })
 
@@ -178,7 +181,7 @@ const orderpage = () => {
 
     return (
         <div>
-            <Navbar  />
+            <Navbar   />
 
             <div className="min-h-screen bg-gray-100 flex justify-center p-8">
 

@@ -11,15 +11,33 @@ const productpage = () => {
   const [food, setFood] = useState(null)
   const [quantity, setQuantity] = useState(1)
 
+  const [wishlist, setWishlist] = useState([])
+
   const router = useRouter()
   const productId = router.query.id
 
   
 
 
-  // token
-
-
+  useEffect (() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token.replace(/^"(.*)"$/, '$1')}`;
+      axios.get('http://127.0.0.1:8000/api/user')
+        .then((response) => {
+          const wishlist = response.data.wishlist;
+          const wishlistFoodIds = wishlist.map((item) => item.food_id);
+          setWishlist(wishlistFoodIds);
+          console.log(wishlistFoodIds);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      console.log('Token not found in local storage');
+    }
+  }, []);
+  
 
 
   // console.log(productId);
@@ -96,7 +114,7 @@ const handleAddToCart = () => {
 }
 
 
-const AddtoWishlist = () => {
+const AddtoWishlist = (id) => {
   const wishlist = {
     food_id: productId,
   }  
@@ -126,6 +144,7 @@ if(token){
   .then(res => {
     console.log(res.data);
     if(res.data.status === 200){
+      setWishlist((prevWishlist) => [...prevWishlist, id]);
       Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -220,8 +239,8 @@ if(token){
 
                   {/* wishlist button */}
 
-                  <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4" onClick={AddtoWishlist}>
-                    <svg fill="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
+                  <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4" onClick={() => AddtoWishlist(food.id)}>
+                    <svg fill={wishlist.includes(food.id) ? "red":"currentcolor"} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
                       <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                     </svg>
                   </button>

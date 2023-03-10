@@ -46,6 +46,9 @@ class OrderHistoryController extends Controller
         foreach ($carts as $cart) {
             $total += $cart->food->price * $cart->quantity;
         }
+        
+        
+
         foreach($carts as $cart){
              OrderHistory::create([
                 'user_id' => $user->id,

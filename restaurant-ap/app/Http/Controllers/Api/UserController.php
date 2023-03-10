@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
 use App\Models\OrderHistory;
+use App\Models\Wishlist;
+
 
 
 
@@ -139,7 +141,12 @@ class UserController extends Controller
         //address
         $user->address;
         //get order history
-        $history = OrderHistory::where('user_id', $user->id)->get();
+        $history = OrderHistory::where('user_id', $user->id)
+                                
+                                ->get();
+
+        //get wishlist
+        $wishlist = Wishlist::where('user_id', $user->id)->get();
         
     
     
@@ -153,7 +160,16 @@ class UserController extends Controller
             return response()->json([
                 'user' => $user, 
                 'address' => $user->address,
-                'history' => $history,
+                'history' => $history->map(function ($item) {
+                    return [
+                        'food_name' => $item->food->food_name,
+                        'picture' => $item->food->picture,
+                        'quantity' => $item->quantity,
+                        'price' => $item->price,
+                       
+                    ];
+                }),
+                
                 'message' => "User found",
                 'status' => 1
             ]);
