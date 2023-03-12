@@ -7,34 +7,26 @@ import Cards from './cards'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
+
+
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const [user , setUser] = useState([]);
- 
+  const [wishlist, setWishlist] = useState([])
 
-  //  const [quantity, setQuantity] = useState(0)
+  const [counter, setCounter] = useState(0);
+
+  const handleCounterChange = (newCounter) => {
+    setCounter(newCounter);
+  };
 
 
-  // useEffect(() => {
-  //   if(localStorage.getItem('token')){
-  //     const token = localStorage.getItem('token').replace(/^"(.*)"$/, '$1');
-  //     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+
+
   
-     
-  //       axios.get(`http://127.0.0.1:8000/api/cartitems`)
-  //       .then((response) => {
-  //         setQuantity(response.data.totalquantity);
-  //         // console.log(response.data.totalquantity);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       }); 
-  //    // 1000ms = 1 second
-  // console.log();
-      
-  //   }
-  // }, []);
+
 
 
   useEffect(() => { 
@@ -48,6 +40,9 @@ export default function Home() {
     axios.get('http://127.0.0.1:8000/api/user')
     .then((response) => {
       setUser(response.data);
+      const wishlist = response.data.wishlist;
+        const wishlistFoodIds = wishlist.map((item) => item.food_id);
+        setWishlist(wishlistFoodIds);
       // console.log(response.data.wishlist);
      
     })
@@ -56,7 +51,7 @@ export default function Home() {
     });
   
   }, []);
-
+console.log(counter);
 
   
 
@@ -64,9 +59,11 @@ export default function Home() {
 
   return (
     <>
-      <Navbar  />
+      <Navbar  counter={counter} onCounterChange={handleCounterChange}  />
       <div className='mt-14'>
-        <Cards user={user} />
+        <Cards user={user} wishlist={wishlist} setWishlist={setWishlist}
+        counter={counter} onCounterChange={handleCounterChange} 
+        />
       </div>
 
     </>

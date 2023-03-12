@@ -8,36 +8,9 @@ import Swal from 'sweetalert2';
 
 
 
-const cards = () => { 
+const cards = ({wishlist,setWishlist,counter, onCounterChange}) => { 
   const [food, setFood] = useState(null)
  const [check , setCheck] = useState([])
-
-
-
- const [wishlist, setWishlist] = useState([])
-
-
- useEffect (() => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token.replace(/^"(.*)"$/, '$1')}`;
-    axios.get('http://127.0.0.1:8000/api/user')
-      .then((response) => {
-        const wishlist = response.data.wishlist;
-        const wishlistFoodIds = wishlist.map((item) => item.food_id);
-        setWishlist(wishlistFoodIds);
-        // console.log(wishlistFoodIds);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  } else {
-    console.log('Token not found in local storage');
-  }
-}, []);
-
-
- 
 
   
   const router = useRouter()
@@ -92,6 +65,9 @@ else{
           console.log(res.data.cart.quantity);
             // setQuantity(quantity)
           if(res.data.status === 200){
+            const newCounter = counter + 1;
+            onCounterChange(newCounter);
+           
             // updateQuantity(res.data.cart.quantity);
             Swal.fire({
               position: 'top-end',
