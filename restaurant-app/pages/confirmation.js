@@ -11,6 +11,9 @@ const confirmation = () => {
 
   const [carts, setCart] = useState([])
   const [total, setTotal] = useState()
+  const [wishlist, setWishlist] = useState([])
+
+
 
   const router = useRouter();
 
@@ -24,6 +27,9 @@ const confirmation = () => {
       .then((response) => {
         setUser(response.data.user);
         // console.log(response.data.user);
+        const wishlist = response.data.wishlist;
+        const wishlistFoodIds = wishlist.map((item) => item.food_id);
+        setWishlist(wishlistFoodIds);
       
       })
       .catch((error) => {
@@ -128,7 +134,7 @@ if(res.data.status === 404){
 
   return (
     <div>
-      <Navbar />
+      <Navbar wishlist={wishlist}  />
 
 
 

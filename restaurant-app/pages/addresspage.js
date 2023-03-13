@@ -10,6 +10,9 @@ import Swal from 'sweetalert2'
 const addresspage = () => {
   const router = useRouter();
 
+  const [wishlist, setWishlist] = useState([])
+
+
 
     const [address, setAddress] = useState('')
     const [city, setCity] = useState('')
@@ -45,12 +48,29 @@ const addresspage = () => {
 
       
     }
- 
+    useEffect (() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token.replace(/^"(.*)"$/, '$1')}`;
+        axios.get('http://127.0.0.1:8000/api/user')
+          .then((response) => {
+            const wishlist = response.data.wishlist;
+            const wishlistFoodIds = wishlist.map((item) => item.food_id);
+            setWishlist(wishlistFoodIds);
+           
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        console.log('Token not found in local storage');
+      }
+    }, []);
 
 
   return (
     <div>
-        <Navbar />
+        <Navbar wishlist={wishlist}  />
         <div className="flex justify-center">
 <div className="container ">
 <div className="flex justify-center">

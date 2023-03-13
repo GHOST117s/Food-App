@@ -7,6 +7,11 @@ import { useState, useEffect } from 'react';
 const userpage = () => {
   const [user, setUser] = useState([]);
   const [History, setHistory] = useState([]);
+  const [wishlist, setWishlist] = useState([])
+
+
+  
+
 
   useEffect(() => {
     const token = localStorage.getItem('token').replace(/^"(.*)"$/, '$1');
@@ -17,6 +22,10 @@ const userpage = () => {
         setUser(response.data.user);
         console.log(response.data);
         setHistory(response.data.history);
+        const wishlist = response.data.wishlist;
+          const wishlistFoodIds = wishlist.map((item) => item.food_id);
+          setWishlist(wishlistFoodIds);
+          console.log(wishlistFoodIds);
 
 
       })
@@ -29,7 +38,7 @@ const userpage = () => {
 
   return (
     <div>
-      <Navbar />
+      <Navbar wishlist={wishlist} />
 
       <section className="text-gray-600 body-font">
         <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">

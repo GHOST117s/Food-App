@@ -160,12 +160,14 @@ class UserController extends Controller
             return response()->json([
                 'user' => $user, 
                 'address' => $user->address,
+                'wishlist' => $wishlist,
                 'history' => $history->map(function ($item) {
                     return [
                         'food_name' => $item->food->food_name,
                         'picture' => $item->food->picture,
                         'quantity' => $item->quantity,
                         'price' => $item->price,
+                        ''
                        
                     ];
                 }),

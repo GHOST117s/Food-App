@@ -70,7 +70,10 @@ class CartController extends Controller
 
 
         //get the user's food
-        $food = Food::findOrFail($validatedData ['food_id']);                  
+        $food = Food::findOrFail($validatedData ['food_id']);      
+        
+     
+        
     
         if ($cartItem) {
             // If food_id exists, update the quantity
@@ -95,9 +98,18 @@ class CartController extends Controller
             ]);
         }
         
+        //get the total cart items
+        $cartItems = Carts::where('user_id', Auth::id())->get();
+        $totalquantity = 0;
+        foreach ($cartItems as $cartItem) {
+            $totalquantity += $cartItem->quantity;
+        }   
+
+        
     
         return response()->json([
-            'cart' => $cartItem,            
+            'cart' => $cartItem,  
+               'totalquantity' => $totalquantity,      
             'status' => 200
         ]);
     }
@@ -151,28 +163,38 @@ class CartController extends Controller
      */
     public function destroy(string $id)
     {
-        
         $cart = Carts::where([
             ['user_id', '=', Auth::id()],
             ['id', '=', $id]
         ])->first();
-
-        if ($cart) {
-            $cart->delete();
+    
+        if (!$cart) {
+            return response()->json([
+                'message' => 'Cart item not found.'
+            ], 404);
         }
+    
+        $cart->delete();
+    
         //cart total
         $carts = Carts::with('food')->where('user_id', Auth::id())->get();
         $total = 0;
         foreach ($carts as $cart) {
             $total += $cart->food->price * $cart->quantity;
         }
+        $totalquantity = 0;
+        foreach ($carts as $cart) {
+            $totalquantity += $cart->quantity;
+        }
 
+    
         return response()->json([
             'message' => 'Cart item deleted successfully.',
+            'totalquantity' => $totalquantity,
             'total' => $total
         ]);
-    
     }
+    
 
    //remove single item by given item
    

@@ -1,9 +1,10 @@
 // import Head from 'next/head'
 // import Image from 'next/image'
-import { Inter } from 'next/font/google'
+// import { Inter } from 'next/font/google'
 // import styles from '@/styles/Home.module.css'
 import Navbar from './Components/Navbar'
 import Cards from './cards'
+
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
@@ -19,6 +20,7 @@ export default function Home() {
 
   const handleCounterChange = (newCounter) => {
     setCounter(newCounter);
+    // console.log("new",newCounter);
   };
 
 
@@ -39,10 +41,13 @@ export default function Home() {
   
     axios.get('http://127.0.0.1:8000/api/user')
     .then((response) => {
+      console.log(response.data.wishlist.length);
       setUser(response.data);
       const wishlist = response.data.wishlist;
         const wishlistFoodIds = wishlist.map((item) => item.food_id);
         setWishlist(wishlistFoodIds);
+
+        
       // console.log(response.data.wishlist);
      
     })
@@ -59,11 +64,15 @@ console.log(counter);
 
   return (
     <>
-      <Navbar  counter={counter} onCounterChange={handleCounterChange}  />
+      <Navbar  counter={counter} onCounterChange={handleCounterChange} user={user} wishlist={wishlist}  />
       <div className='mt-14'>
         <Cards user={user} wishlist={wishlist} setWishlist={setWishlist}
         counter={counter} onCounterChange={handleCounterChange} 
         />
+        
+
+       
+
       </div>
 
     </>

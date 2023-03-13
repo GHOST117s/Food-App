@@ -6,23 +6,43 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2';
 
-
-const orderpage = () => {
+const orderpage = ({counter,onCounterChange}) => {
     const [carts, setCart] = useState([])
     const [total, setTotal] = useState()
-    const [totalquantity, setTotalquantity] = useState()
+    const [totalquantity, setTotalquantity] = useState(0)
+
+  const [wishlist, setWishlist] = useState([])
 
 
-    const handlecartchange = (newCounter) => {
-        setTotalquantity(newCounter)
+
+  useEffect (() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token.replace(/^"(.*)"$/, '$1')}`;
+      axios.get('http://127.0.0.1:8000/api/user')
+        .then((response) => {
+          const wishlist = response.data.wishlist;
+          const wishlistFoodIds = wishlist.map((item) => item.food_id);
+          setWishlist(wishlistFoodIds);
+          console.log(wishlistFoodIds);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      console.log('Token not found in local storage');
     }
+  }, []);
+
+
+
+
+ 
+    // console.log("counter",counter);
    
-
-
     useEffect(() => {
         const token = localStorage.getItem('token').replace(/^"(.*)"$/, '$1');
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
         axios.get(`http://127.0.0.1:8000/api/cartitems`)
             .then(res => {
                 setCart(res.data.carts)
@@ -30,21 +50,16 @@ const orderpage = () => {
                 // console.log(res.data.carts);
                 console.log(res.data.totalquantity);
                
+               
                 //log each item quantity
-
                 setTotalquantity(res.data.totalquantity)
-
-
             })
             .catch(err => {
                 console.log(err)
             })
-
     }, [])
-
-
+    
     async function handledelete(id) {
-
         Swal.fire({
             title: 'Are you sure?',
             text: 'You want to remove this item from your cart!',
@@ -61,28 +76,27 @@ const orderpage = () => {
                 try {
                     await axios.delete(`http://127.0.0.1:8000/api/cart/${id}`)
                    .then(res => {
-
                        console.log(res.data);
                        const newTotal = res.data.total
                        // Set the updated total state
                        setTotal(newTotal);
-
-                       
+                       setTotalquantity(res.data.totalquantity)
                     
                    })
-
                     //remove item from cart
                     const newCart = carts.filter((item) => item.id !== id);
                     setCart(newCart);
                     
+
+                   
+                    
                    
                     //update the total state
+                  
                    
-                    setTotalquantity
                    
                    
-
-
+                   
                 } catch (err) {
                     console.log(err);
                     // Show an error message
@@ -95,24 +109,15 @@ const orderpage = () => {
                 }
             }
         })
-
-
         
     }
-   async function handleMinus(id,food_id){
-    console.log(id);
-    console.log(food_id);
-    const updatedCart = carts.map(item => {
+    async function handleMinus(id,food_id){
+      console.log(id);
+      console.log(food_id);
+      const updatedCart = carts.map(item => {
         if (item.id === id) {
           // Decrement the quantity of the item with the matching id
-          item.quantity -= 1;
-          // Prevent negative quantities
-          if (item.quantity < 1) {
-            item.quantity = 1;
-          }
-          else if(item.quantity === 1){
-
-          }else{
+          if (item.quantity > 1) {
             item.quantity -= 1;
           }
         }
@@ -128,32 +133,23 @@ const orderpage = () => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${formattedToken}`;
       }
       axios.post(`http://127.0.0.1:8000/api/cartdelete`,cart)
-      .then(res => {
-          
+        .then(res => {
+          console.log("deleted");          
           console.log(res.data);
-         axios.get(`http://127.0.0.1:8000/api/cartitems`)
-          .then(res => {    
-              setCart(res.data.carts)           
-              setTotal(res.data.total)    
+          axios.get(`http://127.0.0.1:8000/api/cartitems`)
+            .then(res => {    
+              setCart(res.data.carts);           
+              setTotal(res.data.total);    
               console.log(res.data.totalquantity);
-                setTotalquantity(res.data.totalquantity)
-
-              
-              
-          })
-
-          
-      })
-      .catch((err) => console.log(err));
-  }
-
-
-
-
+              setTotalquantity(res.data.totalquantity);    
+            })          
+        })
+        .catch((err) => console.log(err));
+    }
+    
    async function handleAdd(id,food_id){
     // console.log(id);
     // console.log(food_id);
-
     const updatedCart = carts.map(item => {
         if (item.id === id) {
           // Increment the quantity of the item with the matching id
@@ -161,14 +157,11 @@ const orderpage = () => {
         }
         return item;
       });
-
       const cart ={
         food_id:food_id,
         quantity:1
       }
       console.log(cart);
-
-
       const token = localStorage.getItem('token');
       if(token){ 
         const formattedToken = token.replace(/^"(.*)"$/, '$1');    
@@ -176,6 +169,9 @@ const orderpage = () => {
       }
       axios.post(`http://127.0.0.1:8000/api/cart`,cart)
         .then(res => {
+        
+
+              console.log("added");
             
             console.log(res.data);
            axios.get(`http://127.0.0.1:8000/api/cartitems`)
@@ -187,26 +183,28 @@ const orderpage = () => {
                 // console.log(quantity);
                 console.log(res.data.totalquantity);
                 setTotalquantity(res.data.totalquantity)
-
-
               
-
             })
-
             
         })
         .catch((err) => console.log(err));
     }
+    const handleTotalquantityChange = (value) => {
+      setTotalquantity(value);
+    };
 
+
+
+
+    
     // console.log();
-
     return (
       <div>
-        <Navbar
-          totalquantity={totalquantity}
-          setTotalquantity={setTotalquantity}
+        <Navbar wishlist={wishlist}
+         totalquantity={totalquantity}
+         onTotalquantityChange={handleTotalquantityChange} 
+         
         />
-
         <div className="min-h-screen bg-gray-100 flex justify-center p-8">
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -326,7 +324,6 @@ const orderpage = () => {
                 ))}
               </tbody>
             </table>
-
             <Link href="/confirmation">
               {" "}
               <button className="flex ml-auto m-5 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
@@ -354,5 +351,4 @@ const orderpage = () => {
       </div>
     );
 }
-
 export default orderpage

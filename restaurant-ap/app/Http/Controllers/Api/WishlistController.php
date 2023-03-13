@@ -24,11 +24,16 @@ class WishlistController extends Controller
             ->where('user_id', Auth::id())
             ->distinct('food_id')
             ->get();
+            
+            //to get the total number of items in the wishlist
+            $count = $wishlist->count();
+
     
          
 
         return response()->json([
             'wishlist' => $wishlist,
+            'count' => $count,
            
         ]);
     }

@@ -16,7 +16,7 @@ const wishlistpage = () => {
     axios.get('http://127.0.0.1:8000/api/wishlistitems')
       .then((res) => {
         setWishlist(res.data.wishlist)
-        console.log(res.data.wishlist);
+        console.log(res.data.wishlist.length);
 
         //   const foods = wishlist.map((item) => item.food);
 
@@ -69,7 +69,7 @@ const wishlistpage = () => {
 
       return (
         <div>
-          <Navbar />
+          <Navbar wishlist={wishlist}/>
           <section className="text-gray-600 body-font">
             <div className="container px-5 py-24 mx-auto">
               <div className="flex flex-col text-center w-full mb-20">

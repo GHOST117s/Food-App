@@ -13,8 +13,27 @@ const productpage = () => {
 
   const [wishlist, setWishlist] = useState([])
 
+  const [totalquantity, setTotalquantity] = useState(0)
+
+
+  
+
+
   const router = useRouter()
   const productId = router.query.id
+
+
+
+
+useEffect(() => {
+  const token = localStorage.getItem('token').replace(/^"(.*)"$/, '$1');
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+
+  
+}, [totalquantity])
+
+
 
   
 
@@ -108,10 +127,19 @@ const handleAddToCart = () => {
         timer: 1500
       })
     }
+
+
+    axios.get(`http://127.0.0.1:8000/api/cartitems`)
+.then((res) => {
+  console.log(res.data);
+  setTotalquantity(res.data.totalquantity)
+})
   })
 
   
 }
+
+
 
 
 const AddtoWishlist = (id) => {
@@ -174,6 +202,10 @@ if(token){
 
 }
 
+const handleTotalquantityChange = (value) => {
+  setTotalquantity(value);
+};
+
 
 // console.log(quantity);
 
@@ -182,7 +214,10 @@ if(token){
 
   return (
     <div>
-      <Navbar />
+      <Navbar wishlist={wishlist} 
+      totalquantity={totalquantity}
+      onTotalquantityChange={handleTotalquantityChange}
+        />
 
       <section className="text-gray-600 body-font overflow-hidden">
         <div className="container px-5 py-24 mx-auto">
