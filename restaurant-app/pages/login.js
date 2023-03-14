@@ -50,7 +50,8 @@ const login = () => {
   
       const body = JSON.stringify({ email, password })
   
-      const res = await axios.post('http://127.0.0.1:8000/api/login', body, config)
+      const res = await axios
+      .post('http://127.0.0.1:8000/api/login', body, config)
       localStorage.setItem('token', JSON.stringify(res.data.token))
   
       console.log(res.data)

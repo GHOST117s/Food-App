@@ -234,10 +234,12 @@ const orderpage = ({counter,onCounterChange}) => {
                     key={item.id}
                   >
                     <td className="w-32 p-4">
+                    <Link href={`productpage?id=${item.food.id}`}> 
                       <img
                         src={"http://127.0.0.1:8000/" + item.food.picture}
                         alt="FoodName"
                       />
+                      </Link>
                     </td>
                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                       {item.food.food_name}

@@ -41,8 +41,9 @@ export default function Home() {
   
     axios.get('http://127.0.0.1:8000/api/user')
     .then((response) => {
-      console.log(response.data.wishlist.length);
+      // console.log(response.data.wishlist.length);
       setUser(response.data);
+      // console.log("user",response.data);
       const wishlist = response.data.wishlist;
         const wishlistFoodIds = wishlist.map((item) => item.food_id);
         setWishlist(wishlistFoodIds);
@@ -57,7 +58,7 @@ export default function Home() {
   
   }, []);
 console.log(counter);
-
+// console.log("user",user);
   
 
   

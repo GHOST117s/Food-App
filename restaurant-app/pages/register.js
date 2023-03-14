@@ -31,7 +31,10 @@ const register = () => {
     
         try {
           const res = await axios.post('http://127.0.0.1:8000/api/register', fromData);
+        
           
+          // let result = await axios.post(process.env.NEXT_APP_REGISTER, formData);
+
           // extract the token from the response object
           const token = res.data.token;
     

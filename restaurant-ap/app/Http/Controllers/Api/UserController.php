@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\OrderHistory;
 use App\Models\Wishlist;
+use App\Models\Carts;
 
 
 
@@ -148,6 +149,8 @@ class UserController extends Controller
         //get wishlist
         $wishlist = Wishlist::where('user_id', $user->id)->get();
         
+        //get cart
+        $cart = Carts::where('user_id', $user->id)->get();
     
     
         if (is_null($user)) {
@@ -159,6 +162,7 @@ class UserController extends Controller
         } else {
             return response()->json([
                 'user' => $user, 
+                'cart' => $cart,
                 'address' => $user->address,
                 'wishlist' => $wishlist,
                 'history' => $history->map(function ($item) {
@@ -176,6 +180,13 @@ class UserController extends Controller
                 'status' => 1
             ]);
         }
+
+
+        return response()->json([
+            'user' => $user, 
+            'message' => "User found",
+            'status' => 1
+        ]);
     }
 
 
